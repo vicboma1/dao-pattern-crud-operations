@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**  Basic Singleton **/
 
@@ -13,7 +14,7 @@ public class Database {
 
     private static Database _database = create();
     private Connection con;
-    private UserListMock userListMock;
+    private UsersMock usersMock;
 
     protected static Database create() {
         return new Database();
@@ -22,7 +23,7 @@ public class Database {
     public static Database getInstance(){ return _database; }
 
     Database(){
-        userListMock = userListMock.create();
+        usersMock = usersMock.create();
     }
 
     public void connect() throws Exception {
@@ -52,6 +53,7 @@ public class Database {
         con = null;
     }
 
-    public List<User> getListUser() { return userListMock.getList(); }
+    // Mock
+    public Map<Integer,User> getUsers() { return usersMock.get(); }
 
 }

@@ -3,7 +3,11 @@ package platform;
 import demo.User;
 import platform.bbdd.Database;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class UserDAO implements DAO<User> {
 
@@ -16,39 +20,54 @@ public class UserDAO implements DAO<User> {
 
     }
 
+    public Integer size() {
+        return getUsers().size(); }
+
     @Override
-    public Boolean add(User item){
-        return getDatabase().getListUser().add(item);
+    public User add(User item){
+        return getUsers().put(item.getId(),item);
     }
 
     @Override
-    public User get(int id){
-        return getDatabase().getListUser().get(id);
+    public List<User> addAll(List<User> dataList) {
+        List<User> res = new ArrayList();
+
+        dataList.stream().forEach(x -> {
+            res.add( this.add((x)) );
+        });
+
+        return res;
     }
 
     @Override
-    public List<User> getList(){
-        return getDatabase().getListUser();
-    }
-
-    @Override
-    public User update(User item){
-        User user = item;
-        final int index =  getDatabase().getListUser().lastIndexOf(item);
-        if( index == -1 )
-             getDatabase().getListUser().add(item);
-        else
-            user = getDatabase().getListUser().set(index,item);
-
+    public User get(int id) {
+        final User user = getUsers().get(id);
         return user;
     }
 
     @Override
+    public List<User> getList(){
+        return getUsers().values().stream().collect(Collectors.toList());
+    }
+
+    @Override
+    public User update(User item){
+        return getUsers().put(item.getId(),item);
+    }
+
+    @Override
     public User delete(int id) {
-        return getDatabase().getListUser().remove(id);
+        return getUsers().remove(id);
+    }
+
+    @Override
+    public void deleteAll() {
+        getUsers().clear();
     }
 
     private Database getDatabase(){
         return Database.getInstance();
     }
+
+    private Map<Integer,User> getUsers() { return getDatabase().getUsers(); }
 }

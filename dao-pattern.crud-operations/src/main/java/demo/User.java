@@ -36,6 +36,11 @@ public class User extends Data {
     @Override
     public boolean equals(Object obj) {
         final User user = (User) obj;
-        return name.equals(user.name);
+        return name.equals(user.name) && pass.equals(user.pass);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.pass.hashCode() + this.name.hashCode() + getId();
     }
 }

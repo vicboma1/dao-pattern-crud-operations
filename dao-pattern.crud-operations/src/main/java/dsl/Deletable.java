@@ -6,4 +6,5 @@ import demo.base.Data;
 
 public interface Deletable<T extends Data>  {
     T delete(int id);
+    void deleteAll();
 }
